@@ -32,10 +32,14 @@ export default function Ingredients({
 
   useEffect(() => {
     const getRecipes = async () => {
-      const fetchedRecipes = await fetchRecipes(ingredients);
-      setRecipes(fetchedRecipes);
+      try {
+        const fetchedRecipes = await fetchRecipes(ingredients);
+        setRecipes(fetchedRecipes);
+      } catch (err) {
+        console.log(err);
+      }
     };
-    getRecipes();
+    void getRecipes();
   }, [ingredients]);
 
   const handleSearch = (e: string) => {
