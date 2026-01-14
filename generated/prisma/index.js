@@ -19,7 +19,10 @@ const {
   skip,
   Decimal,
   Debug,
-  objectEnumValues,
+  DbNull,
+  JsonNull,
+  AnyNull,
+  NullTypes,
   makeStrictEnum,
   Extensions,
   warnOnce,
@@ -27,7 +30,7 @@ const {
   Public,
   getRuntime,
   createParam,
-} = require('./runtime/library.js')
+} = require('./runtime/client.js')
 
 
 const Prisma = {}
@@ -36,12 +39,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.19.0
- * Query Engine version: 2ba551f319ab1df4bc874a89965d8b3641056773
+ * Prisma Client JS version: 7.2.0
+ * Query Engine version: 0c8ef2ce45c83248ab3df073180d5eda9e8be7a3
  */
 Prisma.prismaVersion = {
-  client: "6.19.0",
-  engine: "2ba551f319ab1df4bc874a89965d8b3641056773"
+  client: "7.2.0",
+  engine: "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3"
 }
 
 Prisma.PrismaClientKnownRequestError = PrismaClientKnownRequestError;
@@ -69,15 +72,11 @@ Prisma.defineExtension = Extensions.defineExtension
 /**
  * Shorthand utilities for JSON filtering
  */
-Prisma.DbNull = objectEnumValues.instances.DbNull
-Prisma.JsonNull = objectEnumValues.instances.JsonNull
-Prisma.AnyNull = objectEnumValues.instances.AnyNull
+Prisma.DbNull = DbNull
+Prisma.JsonNull = JsonNull
+Prisma.AnyNull = AnyNull
 
-Prisma.NullTypes = {
-  DbNull: objectEnumValues.classes.DbNull,
-  JsonNull: objectEnumValues.classes.JsonNull,
-  AnyNull: objectEnumValues.classes.AnyNull
-}
+Prisma.NullTypes = NullTypes
 
 
 
@@ -94,11 +93,51 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.PostScalarFieldEnum = {
+exports.Prisma.AuthorsScalarFieldEnum = {
+  id: 'id',
+  name: 'name'
+};
+
+exports.Prisma.Authors_recipesScalarFieldEnum = {
+  id: 'id',
+  author_id: 'author_id',
+  recipe_id: 'recipe_id'
+};
+
+exports.Prisma.CategoriesScalarFieldEnum = {
+  id: 'id',
+  name: 'name'
+};
+
+exports.Prisma.Categories_recipesScalarFieldEnum = {
+  id: 'id',
+  category_id: 'category_id',
+  recipe_id: 'recipe_id'
+};
+
+exports.Prisma.IngredientsScalarFieldEnum = {
+  id: 'id',
+  name: 'name'
+};
+
+exports.Prisma.Ingredients_recipesScalarFieldEnum = {
+  id: 'id',
+  ingredient_id: 'ingredient_id',
+  recipe_id: 'recipe_id',
+  full_text: 'full_text'
+};
+
+exports.Prisma.Not_recipesScalarFieldEnum = {
+  id: 'id',
+  url: 'url'
+};
+
+exports.Prisma.RecipesScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  url: 'url',
+  image_url: 'image_url',
+  last_mod: 'last_mod'
 };
 
 exports.Prisma.SortOrder = {
@@ -111,100 +150,46 @@ exports.Prisma.QueryMode = {
   insensitive: 'insensitive'
 };
 
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+
 
 exports.Prisma.ModelName = {
-  Post: 'Post'
+  authors: 'authors',
+  authors_recipes: 'authors_recipes',
+  categories: 'categories',
+  categories_recipes: 'categories_recipes',
+  ingredients: 'ingredients',
+  ingredients_recipes: 'ingredients_recipes',
+  not_recipes: 'not_recipes',
+  recipes: 'recipes'
 };
 /**
  * Create the Client
  */
 const config = {
-  "generator": {
-    "name": "client",
-    "provider": {
-      "fromEnvVar": null,
-      "value": "prisma-client-js"
-    },
-    "output": {
-      "value": "C:\\Jared\\CODING\\Portfolio Projects\\Reverse Recipe\\reverse-recipe-finder\\generated\\prisma",
-      "fromEnvVar": null
-    },
-    "config": {
-      "engineType": "library"
-    },
-    "binaryTargets": [
-      {
-        "fromEnvVar": null,
-        "value": "windows",
-        "native": true
-      }
-    ],
-    "previewFeatures": [],
-    "sourceFilePath": "C:\\Jared\\CODING\\Portfolio Projects\\Reverse Recipe\\reverse-recipe-finder\\prisma\\schema.prisma",
-    "isCustomOutput": true
-  },
-  "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../.env"
-  },
-  "relativePath": "../../prisma",
-  "clientVersion": "6.19.0",
-  "engineVersion": "2ba551f319ab1df4bc874a89965d8b3641056773",
-  "datasourceNames": [
-    "db"
-  ],
+  "previewFeatures": [],
+  "clientVersion": "7.2.0",
+  "engineVersion": "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3",
   "activeProvider": "postgresql",
-  "postinstall": false,
-  "inlineDatasources": {
-    "db": {
-      "url": {
-        "fromEnvVar": "DATABASE_URL",
-        "value": null
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel authors {\n  id              Int               @id @default(autoincrement())\n  name            String            @unique\n  authors_recipes authors_recipes[]\n}\n\nmodel authors_recipes {\n  id        Int     @id @default(autoincrement())\n  author_id Int\n  recipe_id Int\n  authors   authors @relation(fields: [author_id], references: [id], map: \"author_fk\")\n  recipes   recipes @relation(fields: [recipe_id], references: [id], map: \"recipe_fk\")\n}\n\nmodel categories {\n  id                 Int                  @id @default(autoincrement())\n  name               String               @unique\n  categories_recipes categories_recipes[]\n}\n\nmodel categories_recipes {\n  id          Int        @id @default(autoincrement())\n  category_id Int\n  recipe_id   Int\n  categories  categories @relation(fields: [category_id], references: [id], map: \"category_fk\")\n  recipes     recipes    @relation(fields: [recipe_id], references: [id], map: \"recipe_fk\")\n}\n\nmodel ingredients {\n  id                  Int                   @id @default(autoincrement())\n  name                String                @unique\n  ingredients_recipes ingredients_recipes[]\n}\n\nmodel ingredients_recipes {\n  id            Int         @id @default(autoincrement())\n  ingredient_id Int\n  recipe_id     Int\n  full_text     String?\n  ingredients   ingredients @relation(fields: [ingredient_id], references: [id], map: \"ingredient_fk\")\n  recipes       recipes     @relation(fields: [recipe_id], references: [id], map: \"recipe_fk\")\n}\n\nmodel not_recipes {\n  id  Int    @id @default(autoincrement())\n  url String @unique\n}\n\nmodel recipes {\n  id                  Int                   @id @default(autoincrement())\n  name                String?\n  url                 String                @unique\n  image_url           String?\n  last_mod            DateTime?             @db.Timestamptz(6)\n  authors_recipes     authors_recipes[]\n  categories_recipes  categories_recipes[]\n  ingredients_recipes ingredients_recipes[]\n}\n"
+}
+
+config.runtimeDataModel = JSON.parse("{\"models\":{\"authors\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"authors_recipes\",\"kind\":\"object\",\"type\":\"authors_recipes\",\"relationName\":\"authorsToauthors_recipes\"}],\"dbName\":null},\"authors_recipes\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"author_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"recipe_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"authors\",\"kind\":\"object\",\"type\":\"authors\",\"relationName\":\"authorsToauthors_recipes\"},{\"name\":\"recipes\",\"kind\":\"object\",\"type\":\"recipes\",\"relationName\":\"authors_recipesTorecipes\"}],\"dbName\":null},\"categories\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"categories_recipes\",\"kind\":\"object\",\"type\":\"categories_recipes\",\"relationName\":\"categoriesTocategories_recipes\"}],\"dbName\":null},\"categories_recipes\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"category_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"recipe_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"categories\",\"kind\":\"object\",\"type\":\"categories\",\"relationName\":\"categoriesTocategories_recipes\"},{\"name\":\"recipes\",\"kind\":\"object\",\"type\":\"recipes\",\"relationName\":\"categories_recipesTorecipes\"}],\"dbName\":null},\"ingredients\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ingredients_recipes\",\"kind\":\"object\",\"type\":\"ingredients_recipes\",\"relationName\":\"ingredientsToingredients_recipes\"}],\"dbName\":null},\"ingredients_recipes\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"ingredient_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"recipe_id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"full_text\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ingredients\",\"kind\":\"object\",\"type\":\"ingredients\",\"relationName\":\"ingredientsToingredients_recipes\"},{\"name\":\"recipes\",\"kind\":\"object\",\"type\":\"recipes\",\"relationName\":\"ingredients_recipesTorecipes\"}],\"dbName\":null},\"not_recipes\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"url\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null},\"recipes\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"url\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"image_url\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"last_mod\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"authors_recipes\",\"kind\":\"object\",\"type\":\"authors_recipes\",\"relationName\":\"authors_recipesTorecipes\"},{\"name\":\"categories_recipes\",\"kind\":\"object\",\"type\":\"categories_recipes\",\"relationName\":\"categories_recipesTorecipes\"},{\"name\":\"ingredients_recipes\",\"kind\":\"object\",\"type\":\"ingredients_recipes\",\"relationName\":\"ingredients_recipesTorecipes\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
+config.compilerWasm = {
+      getRuntime: async () => require('./query_compiler_bg.js'),
+      getQueryCompilerWasmModule: async () => {
+        const { Buffer } = require('node:buffer')
+        const { wasm } = require('./query_compiler_bg.wasm-base64.js')
+        const queryCompilerWasmFileBytes = Buffer.from(wasm, 'base64')
+
+        return new WebAssembly.Module(queryCompilerWasmFileBytes)
       }
     }
-  },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Post {\n  id        Int      @id @default(autoincrement())\n  name      String\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@index([name])\n}\n",
-  "inlineSchemaHash": "4dfee2d805d63053d5ae63a6ff65a5c68e353713bdd4147909d9158ea83d8e0f",
-  "copyEngine": true
-}
-
-const fs = require('fs')
-
-config.dirname = __dirname
-if (!fs.existsSync(path.join(__dirname, 'schema.prisma'))) {
-  const alternativePaths = [
-    "generated/prisma",
-    "prisma",
-  ]
-  
-  const alternativePath = alternativePaths.find((altPath) => {
-    return fs.existsSync(path.join(process.cwd(), altPath, 'schema.prisma'))
-  }) ?? alternativePaths[0]
-
-  config.dirname = path.join(process.cwd(), alternativePath)
-  config.isBundled = true
-}
-
-config.runtimeDataModel = JSON.parse("{\"models\":{\"Post\":{\"dbName\":null,\"schema\":null,\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":true,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"Int\",\"nativeType\":null,\"default\":{\"name\":\"autoincrement\",\"args\":[]},\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"name\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"String\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":true,\"type\":\"DateTime\",\"nativeType\":null,\"default\":{\"name\":\"now\",\"args\":[]},\"isGenerated\":false,\"isUpdatedAt\":false},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"isList\":false,\"isRequired\":true,\"isUnique\":false,\"isId\":false,\"isReadOnly\":false,\"hasDefaultValue\":false,\"type\":\"DateTime\",\"nativeType\":null,\"isGenerated\":false,\"isUpdatedAt\":true}],\"primaryKey\":null,\"uniqueFields\":[],\"uniqueIndexes\":[],\"isGenerated\":false}},\"enums\":{},\"types\":{}}")
-defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
-config.engineWasm = undefined
-config.compilerWasm = undefined
-
-
-const { warnEnvConflicts } = require('./runtime/library.js')
-
-warnEnvConflicts({
-    rootEnvPath: config.relativeEnvPaths.rootEnvPath && path.resolve(config.dirname, config.relativeEnvPaths.rootEnvPath),
-    schemaEnvPath: config.relativeEnvPaths.schemaEnvPath && path.resolve(config.dirname, config.relativeEnvPaths.schemaEnvPath)
-})
 
 const PrismaClient = getPrismaClient(config)
 exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
-
-// file annotations for bundling tools to include these files
-path.join(__dirname, "query_engine-windows.dll.node");
-path.join(process.cwd(), "generated/prisma/query_engine-windows.dll.node")
-// file annotations for bundling tools to include these files
-path.join(__dirname, "schema.prisma");
-path.join(process.cwd(), "generated/prisma/schema.prisma")

@@ -8,25 +8,15 @@ import {
   ItemTitle,
 } from "@/components/ui/item";
 
-export default function RecipeList() {
-  const recipes = [
-    {
-      id: 1,
-      name: "Tonkatsu (Japanese Breaded Pork Cutlets)",
-      url: "https://www.seriouseats.com/tonkatsu-chicken-pork-katsu-japanese-breaded-cutlets-recipe",
-    },
-    {
-      id: 2,
-      name: "Lasagna Bolognese",
-      url: "https://www.seriouseats.com/no-holds-barred-lasagna-bolognese-pasta-italian-homemade-ricotta",
-    },
-    {
-      id: 3,
-      name: "No Knead Focaccia",
-      url: "https://www.seriouseats.com/easy-no-knead-focaccia",
-    },
-  ];
+interface recipeDb {
+  name: string | null;
+  id: number;
+  url: string;
+  image_url: string | null;
+  last_mod: Date | null;
+}
 
+export default function RecipeList({ recipes }: { recipes: recipeDb[] }) {
   return (
     <div className="h-[20.4rem] w-[300px] flex-col gap-6 overflow-scroll rounded-lg border bg-white text-neutral-500">
       <ItemGroup>

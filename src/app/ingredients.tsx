@@ -1,25 +1,49 @@
 "use client";
 import IngredientSearch from "./ingredient-search";
 import IngredientList from "./ingredient-list";
-import { useState } from "react";
-import ingredientData from "@/data/ingredients-list.json" assert { type: "json" };
+import { useEffect, useState } from "react";
 import RecipeList from "./recipe-list";
+import { fetchRecipes } from "~/server_actions/fetch-recipes";
 
-export default function Ingredients() {
-  const [ingredients, setIngredients] = useState<
-    { id: number; name: string }[]
-  >([]);
+interface ingredientDb {
+  name: string;
+  id: number;
+}
+
+interface recipeDb {
+  name: string | null;
+  id: number;
+  url: string;
+  image_url: string | null;
+  last_mod: Date | null;
+}
+
+export default function Ingredients({
+  ingredientsData,
+}: {
+  ingredientsData: ingredientDb[];
+}) {
+  const [ingredients, setIngredients] = useState<ingredientDb[]>([]);
   const [ingredientSearch, setIngredientSearch] = useState("");
   const [ingredientResults, setIngredientResults] = useState<
     { id: number; name: string }[]
   >([]);
+  const [recipes, setRecipes] = useState<recipeDb[]>([]);
+
+  useEffect(() => {
+    const getRecipes = async () => {
+      const fetchedRecipes = await fetchRecipes(ingredients);
+      setRecipes(fetchedRecipes);
+    };
+    getRecipes();
+  }, [ingredients]);
 
   const handleSearch = (e: string) => {
-    // Conditional prevents empty search string returning alphabetical list
+    // Conditional prevents empty search string from returning alphabetical list
     if (e != "") {
       setIngredientSearch(e);
 
-      const ingredients = ingredientData.filter((ingredient) =>
+      const ingredients = ingredientsData.filter((ingredient) =>
         ingredient.name.toUpperCase().startsWith(e.toUpperCase()),
       );
       const displayedIngredients = ingredients.slice(0, 9);
@@ -30,7 +54,7 @@ export default function Ingredients() {
     }
   };
 
-  const handleAddIngredient = (ingredient: { id: number; name: string }) => {
+  const handleAddIngredient = (ingredient: ingredientDb) => {
     const currentIngredients = [...ingredients];
     currentIngredients.push(ingredient);
     setIngredients(currentIngredients);
@@ -46,6 +70,7 @@ export default function Ingredients() {
 
   return (
     <>
+      <div>testing</div>
       <IngredientSearch
         ingredientSearch={ingredientSearch}
         ingredientResults={ingredientResults}
@@ -56,7 +81,7 @@ export default function Ingredients() {
         ingredients={ingredients}
         handleDeleteIngredient={handleDeleteIngredient}
       />
-      <RecipeList />
+      <RecipeList recipes={recipes} />
     </>
   );
 }

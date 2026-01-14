@@ -7,11 +7,16 @@ import {
   ItemTitle,
 } from "@/components/ui/item";
 
+interface ingredientDb {
+  name: string;
+  id: number;
+}
+
 export default function IngredientList({
   ingredients,
   handleDeleteIngredient,
 }: {
-  ingredients: { id: number; name: string }[];
+  ingredients: ingredientDb[];
   handleDeleteIngredient: (id: number) => void;
 }) {
   return (

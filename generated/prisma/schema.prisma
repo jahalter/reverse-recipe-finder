@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
@@ -8,14 +5,63 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model authors {
+  id              Int               @id @default(autoincrement())
+  name            String            @unique
+  authors_recipes authors_recipes[]
+}
 
-  @@index([name])
+model authors_recipes {
+  id        Int     @id @default(autoincrement())
+  author_id Int
+  recipe_id Int
+  authors   authors @relation(fields: [author_id], references: [id], map: "author_fk")
+  recipes   recipes @relation(fields: [recipe_id], references: [id], map: "recipe_fk")
+}
+
+model categories {
+  id                 Int                  @id @default(autoincrement())
+  name               String               @unique
+  categories_recipes categories_recipes[]
+}
+
+model categories_recipes {
+  id          Int        @id @default(autoincrement())
+  category_id Int
+  recipe_id   Int
+  categories  categories @relation(fields: [category_id], references: [id], map: "category_fk")
+  recipes     recipes    @relation(fields: [recipe_id], references: [id], map: "recipe_fk")
+}
+
+model ingredients {
+  id                  Int                   @id @default(autoincrement())
+  name                String                @unique
+  ingredients_recipes ingredients_recipes[]
+}
+
+model ingredients_recipes {
+  id            Int         @id @default(autoincrement())
+  ingredient_id Int
+  recipe_id     Int
+  full_text     String?
+  ingredients   ingredients @relation(fields: [ingredient_id], references: [id], map: "ingredient_fk")
+  recipes       recipes     @relation(fields: [recipe_id], references: [id], map: "recipe_fk")
+}
+
+model not_recipes {
+  id  Int    @id @default(autoincrement())
+  url String @unique
+}
+
+model recipes {
+  id                  Int                   @id @default(autoincrement())
+  name                String?
+  url                 String                @unique
+  image_url           String?
+  last_mod            DateTime?             @db.Timestamptz(6)
+  authors_recipes     authors_recipes[]
+  categories_recipes  categories_recipes[]
+  ingredients_recipes ingredients_recipes[]
 }
