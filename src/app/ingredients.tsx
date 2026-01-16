@@ -33,7 +33,8 @@ export default function Ingredients({
     const getRecipes = async () => {
       try {
         const fetchedRecipes = await fetchRecipes(ingredients);
-        setRecipes(fetchedRecipes);
+        const slicedRecipes = fetchedRecipes.slice(0, 10);
+        setRecipes(slicedRecipes);
       } catch (err) {
         console.log(err);
       }
