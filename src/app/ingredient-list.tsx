@@ -6,22 +6,39 @@ import {
   ItemGroup,
   ItemTitle,
 } from "@/components/ui/item";
+import IngredientSearch from "./ingredient-search";
 
 interface ingredientDb {
   name: string;
   id: number;
 }
 
+type Props = {
+  ingredients: ingredientDb[];
+  handleDeleteIngredient: (id: number) => void;
+  ingredientSearch: string;
+  ingredientResults: { id: number; name: string }[];
+  handleSearch: (e: string) => void;
+  handleAddIngredient: (ingredient: { id: number; name: string }) => void;
+};
+
 export default function IngredientList({
   ingredients,
   handleDeleteIngredient,
-}: {
-  ingredients: ingredientDb[];
-  handleDeleteIngredient: (id: number) => void;
-}) {
+  ingredientSearch,
+  ingredientResults,
+  handleSearch,
+  handleAddIngredient,
+}: Props) {
   return (
-    <div className="h-[20.4rem] w-[300px] flex-col gap-6 overflow-scroll rounded-lg border bg-white text-neutral-500">
-      <ItemGroup>
+    <div className="h-[20.4rem] w-[300px] flex-col gap-6 overflow-scroll rounded-lg bg-white text-neutral-500">
+      <IngredientSearch
+        ingredientSearch={ingredientSearch}
+        ingredientResults={ingredientResults}
+        handleSearch={handleSearch}
+        handleAddIngredient={handleAddIngredient}
+      />
+      <ItemGroup hidden={ingredientSearch ? true : false}>
         {ingredients.map((ingredient) => {
           console.log(ingredient.name);
           return (
@@ -37,7 +54,7 @@ export default function IngredientList({
               <ItemActions>
                 <Button
                   onClick={() => handleDeleteIngredient(ingredient.id)}
-                  variant="destructive"
+                  variant="ghost"
                   size="sm"
                 >
                   x

@@ -52,15 +52,13 @@ export default function IngredientSearch({
 }: Props) {
   return (
     <div className="">
-      <Command
-        className="h-[20.4rem] w-[300px] rounded-lg border shadow-md"
-        shouldFilter={false}
-      >
+      <Command className="w-[300px]" shouldFilter={false}>
         <CommandInput
           placeholder="Search ingredients..."
+          value={ingredientSearch}
           onValueChange={(e) => handleSearch(e)}
         />
-        <CommandList>
+        <CommandList className="bg-white" hidden={!ingredientSearch}>
           {ingredientResults && !ingredientSearch ? (
             iconElements
           ) : (
@@ -70,7 +68,10 @@ export default function IngredientSearch({
                 <CommandItem
                   className="cursor-pointer active:bg-[#caf1dd]!"
                   key={ingredient.id}
-                  onSelect={() => handleAddIngredient(ingredient)}
+                  onSelect={() => {
+                    handleAddIngredient(ingredient);
+                    handleSearch("");
+                  }}
                 >
                   <span>{ingredient.name}</span>
                 </CommandItem>

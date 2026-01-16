@@ -2,7 +2,6 @@ import "~/styles/globals.css";
 
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";
-import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Reverse Recipe Finder",
@@ -29,10 +28,8 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${geist.variable} h-full`}>
       <body className="h-full bg-linear-to-b from-[#27cf94] to-[#ffffff] text-white">
-        <Suspense fallback={<div>Loading...</div>}>
-          <NavBar />
-          {children}
-        </Suspense>
+        <NavBar />
+        {children}
       </body>
     </html>
   );

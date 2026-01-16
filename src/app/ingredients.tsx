@@ -1,5 +1,4 @@
 "use client";
-import IngredientSearch from "./ingredient-search";
 import IngredientList from "./ingredient-list";
 import { useEffect, useState } from "react";
 import RecipeList from "./recipe-list";
@@ -74,16 +73,13 @@ export default function Ingredients({
 
   return (
     <>
-      <div>testing</div>
-      <IngredientSearch
+      <IngredientList
+        ingredients={ingredients}
+        handleDeleteIngredient={handleDeleteIngredient}
         ingredientSearch={ingredientSearch}
         ingredientResults={ingredientResults}
         handleSearch={handleSearch}
         handleAddIngredient={handleAddIngredient}
-      />
-      <IngredientList
-        ingredients={ingredients}
-        handleDeleteIngredient={handleDeleteIngredient}
       />
       <RecipeList recipes={recipes} />
     </>
