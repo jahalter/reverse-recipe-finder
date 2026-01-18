@@ -101,12 +101,16 @@ export default function Ingredients({
           ingredientResults={ingredientResults}
           handleSearch={handleSearch}
           handleAddIngredient={handleAddIngredient}
+          selectedIngredients={selectedIngredients}
         />
       </div>
 
       <div className="text-center font-semibold">
         Recipes
-        <RecipeList recipes={recipes} />
+        <RecipeList
+          recipes={recipes}
+          selectedIngredients={selectedIngredients}
+        />
       </div>
     </>
   );

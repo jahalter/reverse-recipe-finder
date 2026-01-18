@@ -2,7 +2,7 @@
 @import "tw-animate-css";
 
 html {
-  font-size: 20px;
+  font-size: 24px;
 }
 
 @custom-variant dark (&:is(.dark *));

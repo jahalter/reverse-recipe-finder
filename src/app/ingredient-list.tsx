@@ -21,6 +21,7 @@ type Props = {
   ingredientResults: { id: number; name: string }[];
   handleSearch: (e: string) => void;
   handleAddIngredient: (ingredient: { id: number; name: string }) => void;
+  selectedIngredients: ingredientDb[];
 };
 
 export default function IngredientList({
@@ -30,14 +31,16 @@ export default function IngredientList({
   ingredientResults,
   handleSearch,
   handleAddIngredient,
+  selectedIngredients,
 }: Props) {
   return (
-    <div className="h-[20.4rem] w-[330px] overflow-hidden rounded-lg bg-white text-neutral-500">
+    <div className="h-[24.48rem] w-[396px] overflow-hidden rounded-lg bg-white text-neutral-500">
       <IngredientSearch
         ingredientSearch={ingredientSearch}
         ingredientResults={ingredientResults}
         handleSearch={handleSearch}
         handleAddIngredient={handleAddIngredient}
+        selectedIngredients={selectedIngredients}
       />
       <ScrollArea className="h-full flex-col">
         <ItemGroup hidden={ingredientSearch ? true : false}>
