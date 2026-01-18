@@ -22,7 +22,9 @@ export default function Ingredients({
 }: {
   ingredientsData: ingredientDb[];
 }) {
-  const [ingredients, setIngredients] = useState<ingredientDb[]>([]);
+  const [selectedIngredients, setSelectedIngredients] = useState<
+    ingredientDb[]
+  >([]);
   const [ingredientSearch, setIngredientSearch] = useState("");
   const [ingredientResults, setIngredientResults] = useState<
     { id: number; name: string }[]
@@ -32,7 +34,7 @@ export default function Ingredients({
   useEffect(() => {
     const getRecipes = async () => {
       try {
-        const fetchedRecipes = await fetchRecipes(ingredients);
+        const fetchedRecipes = await fetchRecipes(selectedIngredients);
         const slicedRecipes = fetchedRecipes.slice(0, 10);
         setRecipes(slicedRecipes);
       } catch (err) {
@@ -40,7 +42,7 @@ export default function Ingredients({
       }
     };
     void getRecipes();
-  }, [ingredients]);
+  }, [selectedIngredients]);
 
   const handleSearch = (e: string) => {
     // Conditional prevents empty search string from returning alphabetical list
@@ -50,7 +52,23 @@ export default function Ingredients({
       const ingredients = ingredientsData.filter((ingredient) =>
         ingredient.name.toUpperCase().startsWith(e.toUpperCase()),
       );
-      const displayedIngredients = ingredients.slice(0, 9);
+
+      const normalizedIngredients = ingredients.map((ingredient) => {
+        const lowercaseIngredient = {
+          ...ingredient,
+          name: ingredient.name.toLowerCase(),
+        };
+        return lowercaseIngredient;
+      });
+
+      const filteredIngredients = normalizedIngredients.filter(
+        (ingredient) =>
+          !selectedIngredients.some(
+            (selectedIngredient) => selectedIngredient.id == ingredient.id,
+          ),
+      );
+
+      const displayedIngredients = filteredIngredients.slice(0, 20);
       setIngredientResults(displayedIngredients);
     } else {
       setIngredientSearch("");
@@ -59,30 +77,37 @@ export default function Ingredients({
   };
 
   const handleAddIngredient = (ingredient: ingredientDb) => {
-    const currentIngredients = [...ingredients];
+    const currentIngredients = [...selectedIngredients];
     currentIngredients.push(ingredient);
-    setIngredients(currentIngredients);
+    setSelectedIngredients(currentIngredients);
   };
 
   const handleDeleteIngredient = (id: number) => {
-    const currentIngredients = [...ingredients];
+    const currentIngredients = [...selectedIngredients];
     const filteredIngredients = currentIngredients.filter(
       (ingredient) => ingredient.id !== id,
     );
-    setIngredients(filteredIngredients);
+    setSelectedIngredients(filteredIngredients);
   };
 
   return (
     <>
-      <IngredientList
-        ingredients={ingredients}
-        handleDeleteIngredient={handleDeleteIngredient}
-        ingredientSearch={ingredientSearch}
-        ingredientResults={ingredientResults}
-        handleSearch={handleSearch}
-        handleAddIngredient={handleAddIngredient}
-      />
-      <RecipeList recipes={recipes} />
+      <div className="text-center font-semibold">
+        Ingredients
+        <IngredientList
+          ingredients={selectedIngredients}
+          handleDeleteIngredient={handleDeleteIngredient}
+          ingredientSearch={ingredientSearch}
+          ingredientResults={ingredientResults}
+          handleSearch={handleSearch}
+          handleAddIngredient={handleAddIngredient}
+        />
+      </div>
+
+      <div className="text-center font-semibold">
+        Recipes
+        <RecipeList recipes={recipes} />
+      </div>
     </>
   );
 }

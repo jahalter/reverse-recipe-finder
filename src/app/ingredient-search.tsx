@@ -5,6 +5,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Bean,
   Beef,
@@ -51,34 +52,44 @@ export default function IngredientSearch({
   handleAddIngredient,
 }: Props) {
   return (
-    <div className="">
-      <Command className="w-[300px]" shouldFilter={false}>
+    <div>
+      <Command className="w-[330px]" shouldFilter={false} autoFocus={false}>
         <CommandInput
+          className="text-neutral-500"
           placeholder="Search ingredients..."
           value={ingredientSearch}
           onValueChange={(e) => handleSearch(e)}
         />
-        <CommandList className="bg-white" hidden={!ingredientSearch}>
-          {ingredientResults && !ingredientSearch ? (
-            iconElements
-          ) : (
-            <>
-              <CommandEmpty>No results found.</CommandEmpty>
-              {ingredientResults.map((ingredient) => (
-                <CommandItem
-                  className="cursor-pointer active:bg-[#caf1dd]!"
-                  key={ingredient.id}
-                  onSelect={() => {
-                    handleAddIngredient(ingredient);
-                    handleSearch("");
-                  }}
-                >
-                  <span>{ingredient.name}</span>
-                </CommandItem>
-              ))}
-            </>
-          )}
-        </CommandList>
+        <ScrollArea className="h-[400px]" hidden={!ingredientSearch}>
+          <CommandList
+            className="bg-white p-1 text-neutral-500"
+            autoFocus={false}
+          >
+            {ingredientResults && !ingredientSearch ? (
+              iconElements
+            ) : (
+              <>
+                <CommandEmpty>No results found.</CommandEmpty>
+                {ingredientResults.map((ingredient) => (
+                  <CommandItem
+                    className="mr-1.5 cursor-pointer rounded-2xl p-1 px-2 hover:bg-[#79ddb0]! hover:text-white!"
+                    key={ingredient.id}
+                    onSelect={() => {
+                      handleAddIngredient(ingredient);
+                      handleSearch("");
+                    }}
+                  >
+                    <span>
+                      {ingredient.name.length > 30
+                        ? ingredient.name.slice(0, 30) + "..."
+                        : ingredient.name}
+                    </span>
+                  </CommandItem>
+                ))}
+              </>
+            )}
+          </CommandList>
+        </ScrollArea>
       </Command>
     </div>
   );

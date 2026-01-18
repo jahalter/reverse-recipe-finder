@@ -22,14 +22,21 @@ function NavBar() {
   );
 }
 
+function Footer() {
+  return <footer className="h-[20.4rem]"></footer>;
+}
+
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${geist.variable} h-full`}>
-      <body className="h-full bg-linear-to-b from-[#27cf94] to-[#ffffff] text-white">
-        <NavBar />
-        {children}
+    <html lang="en" className={`${geist.variable} h-dvh text-base`}>
+      <body className="h-dvh bg-linear-to-b from-[#27cf94] to-[#ffffff] text-white">
+        <div className="flex flex-col justify-stretch">
+          <NavBar />
+          {children}
+          <Footer />
+        </div>
       </body>
     </html>
   );
