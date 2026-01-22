@@ -1,8 +1,14 @@
 "use client";
 import IngredientList from "./ingredient-list";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import RecipeList from "./recipe-list";
 import { fetchRecipes } from "~/server_actions/fetch-recipes";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  type CarouselApi,
+} from "@/components/ui/carousel";
 
 interface ingredientDb {
   name: string;
@@ -30,19 +36,21 @@ export default function Ingredients({
     { id: number; name: string }[]
   >([]);
   const [recipes, setRecipes] = useState<recipeDb[]>([]);
+  const [api, setApi] = React.useState<CarouselApi>();
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const getRecipes = async () => {
-      try {
-        const fetchedRecipes = await fetchRecipes(selectedIngredients);
-        const slicedRecipes = fetchedRecipes.slice(0, 10);
-        setRecipes(slicedRecipes);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    void getRecipes();
-  }, [selectedIngredients]);
+  const getRecipes = async () => {
+    try {
+      setIsLoading(true);
+      api?.scrollTo(2, false);
+      const fetchedRecipes = await fetchRecipes(selectedIngredients);
+      const slicedRecipes = fetchedRecipes.slice(0, 10);
+      setRecipes(slicedRecipes);
+      setIsLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleSearch = (e: string) => {
     // Conditional prevents empty search string from returning alphabetical list
@@ -92,26 +100,35 @@ export default function Ingredients({
 
   return (
     <>
-      <div className="text-center font-semibold">
-        Ingredients
-        <IngredientList
-          ingredients={selectedIngredients}
-          handleDeleteIngredient={handleDeleteIngredient}
-          ingredientSearch={ingredientSearch}
-          ingredientResults={ingredientResults}
-          handleSearch={handleSearch}
-          handleAddIngredient={handleAddIngredient}
-          selectedIngredients={selectedIngredients}
-        />
-      </div>
-
-      <div className="text-center font-semibold">
-        Recipes
-        <RecipeList
-          recipes={recipes}
-          selectedIngredients={selectedIngredients}
-        />
-      </div>
+      <Carousel className="w-full max-w-xs" setApi={setApi}>
+        <CarouselContent>
+          <CarouselItem>
+            <div className="flex flex-col items-center">
+              <IngredientList
+                ingredients={selectedIngredients}
+                handleDeleteIngredient={handleDeleteIngredient}
+                ingredientSearch={ingredientSearch}
+                ingredientResults={ingredientResults}
+                handleSearch={handleSearch}
+                handleAddIngredient={handleAddIngredient}
+                selectedIngredients={selectedIngredients}
+                getRecipes={getRecipes}
+              />
+            </div>
+          </CarouselItem>
+          <CarouselItem>
+            <div className="flex flex-col items-center">
+              <RecipeList
+                recipes={recipes}
+                selectedIngredients={selectedIngredients}
+                isLoading={isLoading}
+              />
+            </div>
+          </CarouselItem>
+        </CarouselContent>
+        {/* <CarouselPrevious />
+        <CarouselNext /> */}
+      </Carousel>
     </>
   );
 }

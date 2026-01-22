@@ -29,50 +29,48 @@ export default function IngredientSearch({
   selectedIngredients,
 }: Props) {
   return (
-    <div>
-      <Command className="w-[396px]" shouldFilter={false} autoFocus={false}>
-        <CommandInput
-          className="text-neutral-500"
-          placeholder="Search ingredients..."
-          value={ingredientSearch}
-          onValueChange={(e) => handleSearch(e)}
-        />
-        {!ingredientSearch && selectedIngredients.length == 0 ? (
-          <ScrollArea className="h-[550px]">
-            <CommandList
-              className="bg-white p-1 text-neutral-500"
-              autoFocus={false}
-            >
-              <IconList />
-            </CommandList>
-          </ScrollArea>
-        ) : (
-          <ScrollArea className="h-[550px]" hidden={!ingredientSearch}>
-            <CommandList
-              className="bg-white p-1 text-neutral-500"
-              autoFocus={false}
-            >
-              <CommandEmpty>No results found.</CommandEmpty>
-              {ingredientResults.map((ingredient) => (
-                <CommandItem
-                  className="mr-1.5 cursor-pointer rounded-2xl p-1 px-2 hover:bg-[#79ddb0]! hover:text-white!"
-                  key={ingredient.id}
-                  onSelect={() => {
-                    handleAddIngredient(ingredient);
-                    handleSearch("");
-                  }}
-                >
-                  <span>
-                    {ingredient.name.length > 30
-                      ? ingredient.name.slice(0, 30) + "..."
-                      : ingredient.name}
-                  </span>
-                </CommandItem>
-              ))}
-            </CommandList>
-          </ScrollArea>
-        )}
-      </Command>
-    </div>
+    <Command className="w-[396px]" shouldFilter={false} autoFocus={false}>
+      <CommandInput
+        className="text-neutral-500"
+        placeholder="Search ingredients..."
+        value={ingredientSearch}
+        onValueChange={(e) => handleSearch(e)}
+      />
+      {!ingredientSearch && selectedIngredients.length == 0 ? (
+        <ScrollArea className="h-[550px]">
+          <CommandList
+            className="bg-white p-1 text-neutral-500"
+            autoFocus={false}
+          >
+            <IconList />
+          </CommandList>
+        </ScrollArea>
+      ) : (
+        <ScrollArea className="h-[550px]" hidden={!ingredientSearch}>
+          <CommandList
+            className="bg-white p-1 text-neutral-500"
+            autoFocus={false}
+          >
+            <CommandEmpty>No results found.</CommandEmpty>
+            {ingredientResults.map((ingredient) => (
+              <CommandItem
+                className="mr-1.5 cursor-pointer rounded-2xl p-1 px-2 hover:bg-[#79ddb0]! hover:text-white!"
+                key={ingredient.id}
+                onSelect={() => {
+                  handleAddIngredient(ingredient);
+                  handleSearch("");
+                }}
+              >
+                <span>
+                  {ingredient.name.length > 30
+                    ? ingredient.name.slice(0, 30) + "..."
+                    : ingredient.name}
+                </span>
+              </CommandItem>
+            ))}
+          </CommandList>
+        </ScrollArea>
+      )}
+    </Command>
   );
 }

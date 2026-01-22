@@ -2,11 +2,16 @@ import "~/styles/globals.css";
 
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";
+import type { Viewport } from "next";
 
 export const metadata: Metadata = {
   title: "Reverse Recipe Finder",
   description: "Save your unused groceries from the trash!",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: [{ rel: "icon", url: "/favicon.svg" }],
+};
+
+export const viewport: Viewport = {
+  themeColor: "black",
 };
 
 const geist = Geist({
@@ -22,20 +27,15 @@ function NavBar() {
   );
 }
 
-function Footer() {
-  return <footer className="h-[20.4rem]"></footer>;
-}
-
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${geist.variable} min-h-dvh text-base`}>
-      <body className="min-h-dvh bg-linear-to-b from-[#27cf94] to-[#ffffff] text-white">
+      <body className="min-h-dvh bg-linear-to-b from-[#27cf94] to-[#e6f8ef] text-white">
         <div className="flex flex-col justify-stretch">
           <NavBar />
           {children}
-          {/* <Footer /> */}
         </div>
       </body>
     </html>
