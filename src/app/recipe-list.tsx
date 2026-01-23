@@ -9,6 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import Image from "next/image";
 import { LongIconList } from "./icon-list";
 import { Spinner } from "~/components/ui/spinner";
+import { Button } from "~/components/ui/button";
 
 interface recipeDb {
   name: string | null;

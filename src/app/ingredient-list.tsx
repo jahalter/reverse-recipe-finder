@@ -6,8 +6,10 @@ import {
   ItemGroup,
   ItemTitle,
 } from "@/components/ui/item";
+import { ChevronRight } from "lucide-react";
 import IngredientSearch from "./ingredient-search";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import type { EmblaCarouselType } from "embla-carousel";
 
 interface ingredientDb {
   name: string;
@@ -23,6 +25,8 @@ type Props = {
   handleAddIngredient: (ingredient: { id: number; name: string }) => void;
   selectedIngredients: ingredientDb[];
   getRecipes: () => void;
+  api: EmblaCarouselType | undefined;
+  recipesLength: number;
 };
 
 export default function IngredientList({
@@ -34,6 +38,8 @@ export default function IngredientList({
   handleAddIngredient,
   selectedIngredients,
   getRecipes,
+  api,
+  recipesLength,
 }: Props) {
   return (
     <div className="h-[24.48rem] w-[396px] overflow-hidden rounded-lg bg-white text-neutral-500">
@@ -93,6 +99,13 @@ export default function IngredientList({
             variant="outline"
           >
             Search Recipes
+          </Button>
+          <Button
+            hidden={recipesLength > 0 ? false : true}
+            onClick={() => api?.scrollTo(1, false)}
+            className="absolute top-46 right-3 rounded-none rounded-e-md bg-[#d6f4e5] p-0! text-black hover:bg-[#68dfb5] hover:text-white"
+          >
+            <ChevronRight className="p-0" />
           </Button>
         </div>
       </div>
