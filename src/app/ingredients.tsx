@@ -40,7 +40,6 @@ export default function Ingredients({
   const [recipes, setRecipes] = useState<recipeDb[]>([]);
   const [api, setApi] = React.useState<CarouselApi>();
   const [isLoading, setIsLoading] = useState(false);
-  const [carouselActive, setCarouselActive] = useState(false);
 
   const getRecipes = async () => {
     try {

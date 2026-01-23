@@ -1,6 +1,7 @@
 import {
   Item,
   ItemContent,
+  ItemDescription,
   ItemGroup,
   ItemMedia,
   ItemTitle,
@@ -33,24 +34,26 @@ export default function RecipeList({
   selectedIngredients: ingredientDb[];
   isLoading: boolean;
 }) {
+  const singleRecipe = recipes[0];
+
   return (
     <ScrollArea className="h-[24.48rem] w-[396px] flex-col gap-6 overflow-hidden rounded-lg bg-white text-neutral-500">
       {isLoading ? (
         <Spinner className="m-8 size-8 justify-self-center" />
       ) : (
         <span>
-          {selectedIngredients.length == 0 ? (
+          {selectedIngredients.length === 0 ? (
             <LongIconList />
           ) : (
             <ItemGroup>
-              {recipes.length == 0 ? (
+              {recipes.length === 0 ? (
                 <div className="p-3">No recipes found...</div>
               ) : (
                 recipes.map((recipe) => (
                   <Item
-                    asChild
                     key={recipe.id}
-                    className="mr-4 rounded-xl p-2 hover:bg-white!"
+                    asChild
+                    className="mr-4 rounded-xl p-2 hover:bg-neutral-200! hover:text-neutral-700"
                     variant="default"
                     size="sm"
                   >
