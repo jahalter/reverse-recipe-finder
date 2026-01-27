@@ -27,6 +27,7 @@ type Props = {
   getRecipes: () => void;
   api: EmblaCarouselType | undefined;
   recipesLength: number;
+  handleClearIngredients: () => void;
 };
 
 export default function IngredientList({
@@ -40,60 +41,63 @@ export default function IngredientList({
   getRecipes,
   api,
   recipesLength,
+  handleClearIngredients,
 }: Props) {
   return (
-    <div className="h-[24.48rem] w-[396px] overflow-hidden rounded-lg bg-white text-neutral-500">
-      <div className="flex h-full flex-col">
-        <div className="flex-none">
-          <IngredientSearch
-            ingredientSearch={ingredientSearch}
-            ingredientResults={ingredientResults}
-            handleSearch={handleSearch}
-            handleAddIngredient={handleAddIngredient}
-            selectedIngredients={selectedIngredients}
-          />
-        </div>
-        <div
-          className="flex grow flex-col"
-          hidden={ingredientSearch ? true : false}
-        >
-          <ScrollArea className="relative flex h-0 grow flex-col overflow-hidden border-b">
-            <ItemGroup className="mb-7">
-              {ingredients.map((ingredient) => {
-                return (
-                  <Item
-                    key={ingredient.id}
-                    className="rounded-none p-0 px-1"
-                    variant="default"
-                    size="sm"
-                  >
-                    <ItemContent className="flex flex-row text-nowrap">
-                      <span className="text-[1rem] font-extrabold text-[#79ddb0]">
-                        +
-                      </span>
-                      {/* <ItemTitle className="rounded-2xl bg-[#79ddb0] p-0.5 px-2.5 py-1 pb-1.5 font-semibold text-white"> */}
-                      <ItemTitle className="pl-0.5 font-semibold">
-                        {ingredient.name.length > 24
-                          ? ingredient.name.slice(0, 24) + "..."
-                          : ingredient.name}
-                      </ItemTitle>
-                    </ItemContent>
-                    <ItemActions>
-                      <Button
-                        className="mr-2 active:bg-[#caf1dd]!"
-                        onClick={() => handleDeleteIngredient(ingredient.id)}
-                        variant="ghost"
-                        size="sm"
-                      >
-                        x
-                      </Button>
-                    </ItemActions>
-                  </Item>
-                );
-              })}
-            </ItemGroup>
-          </ScrollArea>
+    <div>
+      <div className="h-74 w-[316.8px] overflow-hidden rounded-lg bg-white text-neutral-500 sm:h-96 sm:w-[396px]">
+        <div className="relative flex h-full flex-col">
+          <div className="flex-none">
+            <IngredientSearch
+              ingredientSearch={ingredientSearch}
+              ingredientResults={ingredientResults}
+              handleSearch={handleSearch}
+              handleAddIngredient={handleAddIngredient}
+              selectedIngredients={selectedIngredients}
+            />
+          </div>
+          <div
+            className="relative flex grow flex-col"
+            hidden={ingredientSearch ? true : false}
+          >
+            <ScrollArea className="flex h-0 grow flex-col overflow-hidden border-b">
+              <ItemGroup className="mb-7">
+                {ingredients.map((ingredient) => {
+                  return (
+                    <Item
+                      key={ingredient.id}
+                      className="rounded-none p-0 px-1"
+                      variant="default"
+                      size="sm"
+                    >
+                      <ItemContent className="flex flex-row text-nowrap">
+                        <span className="text-[1rem] font-extrabold text-[#79ddb0]">
+                          +
+                        </span>
+                        <ItemTitle className="pl-0.5 font-semibold">
+                          {ingredient.name.length > 17
+                            ? ingredient.name.slice(0, 17) + "..."
+                            : ingredient.name}
+                        </ItemTitle>
+                      </ItemContent>
+                      <ItemActions>
+                        <Button
+                          className="mr-2 active:bg-[#caf1dd]!"
+                          onClick={() => handleDeleteIngredient(ingredient.id)}
+                          variant="ghost"
+                          size="sm"
+                        >
+                          x
+                        </Button>
+                      </ItemActions>
+                    </Item>
+                  );
+                })}
+              </ItemGroup>
+            </ScrollArea>
+          </div>
           <Button
+            hidden={ingredientSearch || ingredients.length === 0 ? true : false}
             onClick={async () => getRecipes()}
             className="absolute bottom-0 flex-none self-center rounded-b-xs bg-[#68dfb5] p-2 text-white! hover:bg-[#a2e6c5]"
             variant="outline"
@@ -101,14 +105,22 @@ export default function IngredientList({
             Search Recipes
           </Button>
           <Button
-            hidden={recipesLength > 0 ? false : true}
-            onClick={() => api?.scrollTo(1, false)}
-            className="absolute top-46 right-3 rounded-none rounded-e-md bg-[#d6f4e5] p-0! text-black hover:bg-[#68dfb5] hover:text-white"
+            hidden={ingredientSearch || ingredients.length === 0 ? true : false}
+            onClick={handleClearIngredients}
+            className="absolute right-1.5 bottom-0 h-6 flex-none self-center rounded-b-xs bg-neutral-500 p-0 px-1 text-[.5rem] font-bold text-white! hover:bg-neutral-400 sm:right-4 sm:text-[.6rem]"
+            variant="outline"
           >
-            <ChevronRight className="p-0" />
+            CLEAR
           </Button>
         </div>
       </div>
+      <Button
+        hidden={recipesLength > 0 ? false : true}
+        onClick={() => api?.scrollTo(1, false)}
+        className="absolute top-35 right-5.5 rounded-none rounded-e-md bg-[#d6f4e5] p-0! text-black hover:cursor-pointer hover:bg-[#68dfb5] hover:text-white sm:top-46 sm:right-3"
+      >
+        <ChevronRight className="p-0" />
+      </Button>
     </div>
   );
 }

@@ -32,6 +32,7 @@ export async function fetchRecipes(ingredients: ingredientDb[]) {
   if (commonRecipeIds !== undefined) {
     const recipes = await prisma.recipes.findMany({
       where: { id: { in: [...commonRecipeIds] } },
+      include: { ingredients_recipes: true },
     });
     return recipes;
   } else {

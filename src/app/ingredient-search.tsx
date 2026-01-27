@@ -29,7 +29,7 @@ export default function IngredientSearch({
   selectedIngredients,
 }: Props) {
   return (
-    <Command className="w-[396px]" shouldFilter={false} autoFocus={false}>
+    <Command className="" shouldFilter={false} autoFocus={false}>
       <CommandInput
         className="text-neutral-500"
         placeholder="Search ingredients..."

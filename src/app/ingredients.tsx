@@ -23,6 +23,12 @@ interface recipeDb {
   url: string;
   image_url: string | null;
   last_mod: Date | null;
+  ingredients_recipes: {
+    id: number;
+    recipe_id: number;
+    ingredient_id: number;
+    full_text: string | null;
+  }[];
 }
 
 export default function Ingredients({
@@ -88,6 +94,7 @@ export default function Ingredients({
   };
 
   const handleAddIngredient = (ingredient: ingredientDb) => {
+    setRecipes([]);
     const currentIngredients = [...selectedIngredients];
     currentIngredients.push(ingredient);
     setSelectedIngredients(currentIngredients);
@@ -101,6 +108,11 @@ export default function Ingredients({
       (ingredient) => ingredient.id !== id,
     );
     setSelectedIngredients(filteredIngredients);
+  };
+
+  const handleClearIngredients = () => {
+    setRecipes([]);
+    setSelectedIngredients([]);
   };
 
   return (
@@ -124,6 +136,7 @@ export default function Ingredients({
                 getRecipes={getRecipes}
                 api={api}
                 recipesLength={recipes.length}
+                handleClearIngredients={handleClearIngredients}
               />
             </div>
           </CarouselItem>
@@ -136,7 +149,7 @@ export default function Ingredients({
               />
               <Button
                 onClick={() => api?.scrollTo(0, false)}
-                className="absolute top-46 left-3 rounded-none rounded-s-md bg-[#d6f4e5] p-0! text-black hover:cursor-pointer hover:bg-[#68dfb5] hover:text-white!"
+                className="absolute top-35 left-5.5 rounded-none rounded-s-md bg-[#d6f4e5] p-0! text-black hover:cursor-pointer hover:bg-[#68dfb5] hover:text-white! sm:top-46 sm:left-3"
               >
                 <ChevronLeft className="p-0" />
               </Button>

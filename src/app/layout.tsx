@@ -32,7 +32,7 @@ export default async function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${geist.variable} min-h-dvh text-base`}>
-      <body className="min-h-dvh bg-linear-to-b from-[#27cf94] to-[#e6f8ef] text-white">
+      <body className="min-h-dvh bg-linear-to-b from-[#27cf94] to-white text-white">
         <div className="flex flex-col justify-stretch">
           <NavBar />
           {children}

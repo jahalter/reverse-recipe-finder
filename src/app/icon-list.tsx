@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 
 const icons = [
-  { element: <Beef />, key: 1 },
+  { element: <Carrot />, key: 1 },
   { element: <Fish />, key: 2 },
   { element: <Wheat />, key: 3 },
   { element: <Milk />, key: 4 },
@@ -28,8 +28,8 @@ const icons = [
   { element: <Nut />, key: 7 },
   { element: <Egg />, key: 8 },
   { element: <Bean />, key: 9 },
-  { element: <Carrot />, key: 10 },
-  { element: <LeafyGreen />, key: 11 },
+  { element: <LeafyGreen />, key: 10 },
+  { element: <Beef />, key: 11 },
   { element: <Ham />, key: 12 },
 ];
 
@@ -51,8 +51,8 @@ const longIcons = [
 ];
 
 const iconElements = icons.map((icon) => (
-  <CommandItem key={icon.key} onSelect={() => console.log("")}>
-    <span>{icon.element}</span>
+  <CommandItem key={icon.key}>
+    <div>{icon.element}</div>
   </CommandItem>
 ));
 
